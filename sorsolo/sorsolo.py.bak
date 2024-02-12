@@ -1,0 +1,69 @@
+import random
+import tkinter as tk
+from tkinter import filedialog as fd
+
+# Tkinter------------------------------------------------------------------
+window = tk.Tk()
+window.title("Sorsolás")
+window.geometry("450x110") # width x height
+window.resizable(False, False)
+
+# File reading
+nevek_listaja = []
+with open('nevsor.txt','r') as nevsor:
+    nevsortag = nevsor.readlines()
+    for i in nevsortag:
+        nevsortag_str = i.strip()
+        nevek_listaja.append(nevsortag_str)
+
+#Definitions---------------------------------------------------------------
+
+def ujrainditas():
+    global nevek_listaja
+    nevek_listaja = []
+    with open('nevsor.txt','r') as nevsor:
+        nevsortag = nevsor.readlines()
+    for i in nevsortag:
+        nevsortag_str = i.strip()
+        nevek_listaja.append(nevsortag_str)
+    label.config(text="Sorsolás")
+
+def labelChange():
+        random_nev = random.choice(nevek_listaja)
+        label.config(text=random_nev)
+
+        index = nevek_listaja.index(random_nev)
+        nevek_listaja.pop(index)
+        if len(nevek_listaja) == 0:
+            label.config(text="Nincs több ember a névsorban!", font=("",12))
+
+def fileOpen():
+    filename = fd.askopenfile()
+    nevek_listaja = []
+    with open(filename,'r') as nevsor:
+        nevsortag = nevsor.readlines()
+        for i in nevsortag:
+            nevsortag_str = i.strip()
+            nevek_listaja.append(nevsortag_str)
+
+#Window commands-----------------------------------------------------------
+label = tk.Label(window, text="Sorsolás", font=("",25))
+label.pack(ipadx = 5, ipady = 5, expand = True)
+
+#kilepes = tk.Button(window, text="X", width = 10, font=("", 10), fg='red', command=lambda: window.quit())
+#kilepes.pack(ipadx = 5, ipady = 5, side = tk.LEFT, expand=True)
+#kilepes.place(x=0,y=0,width=45, height=45)
+
+ujraindit = tk.Button(window, text="Újraindítás", width = 10, font=("", 10), command=lambda: ujrainditas())
+ujraindit.pack(ipadx = 5, ipady = 5, side = tk.LEFT, expand=True)
+
+sorsolas = tk.Button(window, text="Sorsol", width=10, font=("", 10), command=lambda: labelChange())
+sorsolas.pack(ipadx = 5, ipady = 5, side = tk.RIGHT, expand=True)
+
+ujraindit = tk.Button(window, text="Fájl", width = 10, font=("", 10), command=lambda: fileOpen())
+ujraindit.pack(ipadx = 5, ipady = 5, side = tk.RIGHT, expand=True)
+
+
+
+#Main loop for the window--------------------------------------------------
+window.mainloop()
